@@ -5,11 +5,17 @@ import CustomInput from "@/components/CustomInput";
 import CustomButton from "@/components/CustomButton";
 
 const SignIn = () => {
+  // Variable que indica si el formulario se está enviando (loading state)
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Objeto que almacena los valores del formulario
   const [form, setForm] = useState({email: "", password: ""});
 
+  // Se ejecuta cuando el usuario hace click en "Sign In" manejando el proceso completo de login
   const submit = async () => {
-    if(!form.email || !form.password) Alert.alert("Error", "Please enter a valid email address and password");
+    // Validacion de campos
+    if(!form.email || !form.password){
+      return Alert.alert("Error", "Please enter a valid email address and password");
+    }
 
     setIsSubmitting(true);
 
