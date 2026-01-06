@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   KeyboardAvoidingView,
   ScrollView,
   ImageBackground,

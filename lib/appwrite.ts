@@ -1,5 +1,5 @@
 import { CreateUserParams, SignInParams } from "@/type";
-import { Client, ID } from "react-native-appwrite";
+import { Client, ID, Query } from "react-native-appwrite";
 import { Account, Avatars, Databases } from "react-native-appwrite";
 
 // Configuracion de Appwrite
@@ -35,7 +35,7 @@ export const createUser = async ({
     // Iniciar sesión automáticamente despues de crear la cuenta
     const session = await signIn({ email, password });
 
-    const avatarUrl = avatars.getInitials(name).toString();
+    const avatarUrl = `${appwriteConfig.endpoint}/avatars/${encodeURIComponent(name)}`;
 
     // Crear documento de usuario en la base de datos
     const newUser = await databases.createDocument(
@@ -70,3 +70,20 @@ export const signIn = async ({ email, password }: SignInParams) => {
     throw new Error(error instanceof Error ? error.message : "Unknown error");
   }
 };
+
+export const getCurrentUser = async () => {
+  try {
+    const currentAccount = await account.get();
+    if(!currentAccount) throw new Error;
+
+    const currentUser = await databases.listDocuments(
+      appwriteConfig.databaseId!,
+      appwriteConfig.userTableId!,
+      [Query.equal("accountId", currentAccount.$id)],
+    )
+    if(!currentUser) throw Error;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error as string);
+  }
+}

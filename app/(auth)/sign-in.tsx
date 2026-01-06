@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, router } from "expo-router";
 import CustomInput from "@/components/CustomInput";
 import CustomButton from "@/components/CustomButton";
+import { signIn } from "@/lib/appwrite";
 
 const SignIn = () => {
   // Variable que indica si el formulario se está enviando (loading state)
@@ -12,18 +13,18 @@ const SignIn = () => {
 
   // Se ejecuta cuando el usuario hace click en "Sign In" manejando el proceso completo de login
   const submit = async () => {
+    const {email,  password} = form; 
     // Validacion de campos
-    if(!form.email || !form.password){
+    if(!email || !password){
       return Alert.alert("Error", "Please enter a valid email address and password");
     }
 
     setIsSubmitting(true);
 
     try {
-      // Llamamos a la funcion de inicio de sesion de Appwrite
-
-      Alert.alert("Success", "User signed in succesfully.")
+      await signIn({email, password})
       router.replace("/");
+      
     } catch (error: any) {
       Alert.alert("Error", error.message)
     } finally {

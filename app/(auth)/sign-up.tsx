@@ -7,7 +7,7 @@ import { createUser } from "@/lib/appwrite";
 
 const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [form, setForm] = useState({name: "",email: "", password: ""});
+  const [form, setForm] = useState({name: "", email: "", password: ""});
 
   const submit = async () => {
     const {name, email,  password} = form; 
@@ -51,15 +51,15 @@ const SignUp = () => {
         secureTextEntry={true}
       />
       <CustomButton 
-      title="Sign In"
+      title="Sign Up"
       isLoading={isSubmitting}
       onPress={submit}
       />
       <View className="flex justify-center flex-row gap-2">
         <Text className="base-regular text-gray-100">
-          Don't have an account?
+          Already have an account?
         </Text>
-        <Link href="/sign-up" className="base-bold text-primary">
+        <Link href="/sign-in" className="base-bold text-primary">
         Sign In
         </Link>
       </View>
