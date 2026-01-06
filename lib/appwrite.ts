@@ -1,4 +1,4 @@
-import { CreateUserParams, SignInParams } from "@/type";
+import { CreateUserParams, SignInParams, User } from "@/type";
 import { Client, ID, Query } from "react-native-appwrite";
 import { Account, Avatars, Databases } from "react-native-appwrite";
 
@@ -14,13 +14,13 @@ export const appwriteConfig = {
 export const client = new Client();
 
 client
-  .setEndpoint(appwriteConfig.endpoint!)
-  .setProject(appwriteConfig.projectId!)
-  .setPlatform(appwriteConfig.platform!);
+  .setEndpoint(appwriteConfig.endpoint!) // La dirección de tu servidor.
+  .setProject(appwriteConfig.projectId!) // El ID del proyecto.
+  .setPlatform(appwriteConfig.platform!); // El ID del app.
 
-export const account = new Account(client); // Autenticación
-export const databases = new Databases(client); // Base de datos
-export const avatars = new Avatars(client); // Generación de avatares
+export const account = new Account(client); // Maneja todo lo técnico de los usuarios: crear cuenta, iniciar sesión, cerrar sesión y recuperar la contraseña.
+export const databases = new Databases(client); // Maneja las tablas de la base de datos
+export const avatars = new Avatars(client); // Es una utilidad que genera imágenes automáticamente
 
 // Registro de usuarios
 export const createUser = async ({
@@ -59,7 +59,6 @@ export const createUser = async ({
   }
 };
 
-
 // Funcion de inicio de sesion
 export const signIn = async ({ email, password }: SignInParams) => {
   try {
@@ -71,19 +70,27 @@ export const signIn = async ({ email, password }: SignInParams) => {
   }
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<User> => {
   try {
+    // Funcion de Appwrite para comprobar si existe una sesion iniciada
     const currentAccount = await account.get();
-    if(!currentAccount) throw new Error;
+    if (!currentAccount) throw Error();
 
-    const currentUser = await databases.listDocuments(
+    // Busca el perfil en la base de datos
+    const currentUser = await databases.listDocuments<User>(
       appwriteConfig.databaseId!,
       appwriteConfig.userTableId!,
-      [Query.equal("accountId", currentAccount.$id)],
-    )
-    if(!currentUser) throw Error;
+      //Filtra unicamente el usuario con el id que queremos
+      [Query.equal("accountId", currentAccount.$id)]
+    );
+
+    if (!currentUser) throw Error;
+
+    return currentUser.documents[0];
+
   } catch (error) {
+
     console.log(error);
     throw new Error(error as string);
   }
-}
+};

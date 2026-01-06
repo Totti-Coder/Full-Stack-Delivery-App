@@ -39,6 +39,14 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "pablo_reactnative_food-ordering",
+          "organization": "totti-coder"
+        }
       ]
     ],
     "experiments": {

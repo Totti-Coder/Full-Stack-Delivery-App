@@ -1,10 +1,10 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import "../global.css";
 import {
+  Button,
   FlatList,
   Image,
   Pressable,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -12,6 +12,7 @@ import {
 import { images, offers } from "@/constants";
 import React, { Fragment } from "react";
 import cn from "clsx";
+import * as Sentry from "@sentry/react-native";
 import CartButton from "@/components/CartButton";
 
 export default function Index() {
