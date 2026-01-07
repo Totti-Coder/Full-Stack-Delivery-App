@@ -80,7 +80,7 @@ export const getCurrentUser = async (): Promise<User> => {
     const currentUser = await databases.listDocuments<User>(
       appwriteConfig.databaseId!,
       appwriteConfig.userTableId!,
-      //Filtra unicamente el usuario con el id que queremos
+      // Filtra unicamente el usuario con el id que queremos
       [Query.equal("accountId", currentAccount.$id)]
     );
 
