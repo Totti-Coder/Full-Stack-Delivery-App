@@ -9,6 +9,11 @@ export const appwriteConfig = {
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID,
   databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID,
   userTableId: process.env.EXPO_PUBLIC_APPWRITE_USER_TABLE_ID,
+  categoriesTableId: process.env.EXPO_PUBLIC_CATEGORIES_TABLE_ID,
+  menuTableId: process.env.EXPO_PUBLIC_APPWRITE_MENU_TABLE_ID,
+  customizationTableId: process.env.EXPO_PUBLIC_APPWRITE_CUSTOMIZATION_TABLE_ID,
+  menuCustomizationTableId: process.env.EXPO_PUBLIC_MENU_CUSTOMIZATION_MENU_TABLE_ID,
+  bucketId: process.env.EXPO_PUBLIC_BUCKET_ID,
 };
 
 export const client = new Client();
@@ -29,6 +34,8 @@ export const createUser = async ({
   name,
 }: CreateUserParams) => {
   try {
+    // Creacion de cuenta
+
     const newAccount = await account.create(ID.unique(), email, password, name);
     if (!newAccount) throw new Error("Failed to create account");
 
@@ -62,6 +69,7 @@ export const createUser = async ({
 // Funcion de inicio de sesion
 export const signIn = async ({ email, password }: SignInParams) => {
   try {
+    // Creacion de la sesion
     const session = await account.createEmailPasswordSession(email, password);
     return session;
   } catch (error) {

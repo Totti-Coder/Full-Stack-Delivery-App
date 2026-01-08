@@ -12,7 +12,6 @@ import {
 import { images, offers } from "@/constants";
 import React, { Fragment } from "react";
 import cn from "clsx";
-import * as Sentry from "@sentry/react-native";
 import CartButton from "@/components/CartButton";
 import useAuthStore from "@/store/auth.store";
 
@@ -73,7 +72,10 @@ export default function Index() {
                     </Text>
                     <Image
                       source={images.arrowRight}
-                      className="size-10"
+                      className={cn(
+                      "size-10",
+                      // Sirve para voltear la flecha horizontalmente si quieres que apunte al otro lado
+                      isEven ? "rotate-0" : "rotate-180")}
                       resizeMode="contain"
                       tintColor="#ffffff"
                     ></Image>
