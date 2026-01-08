@@ -1,6 +1,6 @@
 import { CreateUserParams, SignInParams, User } from "@/type";
 import { Client, ID, Query } from "react-native-appwrite";
-import { Account, Avatars, Databases } from "react-native-appwrite";
+import { Account, Avatars, Databases, Storage } from "react-native-appwrite";
 
 // Configuracion de Appwrite
 export const appwriteConfig = {
@@ -26,6 +26,7 @@ client
 export const account = new Account(client); // Maneja todo lo técnico de los usuarios: crear cuenta, iniciar sesión, cerrar sesión y recuperar la contraseña.
 export const databases = new Databases(client); // Maneja las tablas de la base de datos
 export const avatars = new Avatars(client); // Es una utilidad que genera imágenes automáticamente
+export const storage = new Storage(client);
 
 // Registro de usuarios
 export const createUser = async ({
