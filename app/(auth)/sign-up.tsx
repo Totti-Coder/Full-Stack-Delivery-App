@@ -4,10 +4,14 @@ import { Link, router } from "expo-router";
 import CustomInput from "@/components/CustomInput";
 import CustomButton from "@/components/CustomButton";
 import { createUser } from "@/lib/appwrite";
+import useAuthStore from "@/store/auth.store";
 
 const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({name: "", email: "", password: ""});
+
+  // La función del store
+  const { fetchAuthenticatedUser } = useAuthStore();
 
   const submit = async () => {
     const {name, email,  password} = form; 
@@ -19,6 +23,8 @@ const SignUp = () => {
     try {
       // Llamamos a la funcion de registro de Appwrite
       await createUser({email, password, name})
+      // Actualizamos el store global en Zustand
+      await fetchAuthenticatedUser();
       router.replace("/");
       
     } catch (error: any) {

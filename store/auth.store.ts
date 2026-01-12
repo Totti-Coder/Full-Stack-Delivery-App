@@ -19,7 +19,10 @@ type AuthState = {
     setLoading: (value: boolean) => void;
 
     // Método asíncrono que encapsula toda la lógica de verificación y obtención del usuario autenticado desde el backend.
-    fetchAuthenticatedUser: () => Promise<void>;
+    fetchAuthenticatedUser: () => Promise<User | null>;
+    
+    // Método para limpiar el estado al cerrar sesión
+    clearAuth: () => void;
 }
 
 const useAuthStore = create<AuthState>((set) => ({
@@ -28,32 +31,37 @@ const useAuthStore = create<AuthState>((set) => ({
   isLoading: true,
 
   setIsAuthenticated: (value) => set({isAuthenticated: value}),
-
   setUser: (user) => set({user}),
   setLoading: (value) => set({isLoading: value}),
 
   fetchAuthenticatedUser: async () => {
-    // Establece el indicador de carga antes de la operación asíncrona, permitiendo que la UI muestre un spinner
     set({isLoading: true});
 
     try {
-      // Realiza una llamada asíncrona a Appwrite a través de la función getCurrentUser()
-        const userData = await getCurrentUser();
+      const userData = await getCurrentUser();
 
-        // Si userData existe → actualiza el estado con el usuario y marca como autenticado
-        if(userData) set({isAuthenticated: true, user: userData })
-        // Si userData es null o undefined → limpia el estado 
-        else set({ isAuthenticated: false, user: null})
+      if(userData) {
+        set({isAuthenticated: true, user: userData });
+        return userData;
+      } else {
+        set({ isAuthenticated: false, user: null});
+        return null;
+      }
       
-      // Manejo de Errores
     } catch(e){
-        console.log("fetchAuthenticatedUser error", e);
-        // Limpia el estado de autenticación
-        set({isAuthenticated: false, user: null})
+      console.log("fetchAuthenticatedUser error", e);
+      set({isAuthenticated: false, user: null});
+      return null;
     } finally {
-      // Se ejecuta siempre, independientemente del resultado, desactivando el indicador de carga
-        set({isLoading:false});
+      set({isLoading:false});
     }
+  },
+  clearAuth: () => {
+    set({
+      isAuthenticated: false,
+      user: null,
+      isLoading: false
+    });
   }
 }));
 

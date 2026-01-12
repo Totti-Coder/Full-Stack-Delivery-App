@@ -36,7 +36,6 @@ export const createUser = async ({
 }: CreateUserParams) => {
   try {
     // Creacion de cuenta
-
     const newAccount = await account.create(ID.unique(), email, password, name);
     if (!newAccount) throw new Error("Failed to create account");
 
